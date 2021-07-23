@@ -67,8 +67,8 @@ public class OneArmBandit extends EntityHuman {
     @Override
     public boolean onUpdate(int currentTick) {
         if(onLottery == null) {
-            // delay for 3 seconds
-            if(currentTick % 60 == 0) {
+            // delay for 5.5 seconds
+            if(currentTick % 110 == 0) {
                 playAnimation(DataPool.ONE_ARM_BANDIT_SETUP);
             }
         }
@@ -78,6 +78,15 @@ public class OneArmBandit extends EntityHuman {
     public void playAnimation(String animation) {
         AnimateLotteryPacket pk = new AnimateLotteryPacket();
         pk.setAnimation(animation);
+        pk.setEntityRuntimeIds(Collections.singletonList(getId()));
+        getServer().getOnlinePlayers().values().forEach(player -> player.dataPacket(pk));
+    }
+
+    public void playAnimation(String animation, int duration) {
+        AnimateLotteryPacket pk = new AnimateLotteryPacket();
+        pk.setAnimation(animation);
+        // blendoutTime 存在50tick延迟
+        pk.setBlendOutTime((float) (duration - 50));
         pk.setEntityRuntimeIds(Collections.singletonList(getId()));
         getServer().getOnlinePlayers().values().forEach(player -> player.dataPacket(pk));
     }

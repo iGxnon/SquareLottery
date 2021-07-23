@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 public class FormModal extends FormWindowModal {
 
     public FormModal(String title, String content) {
-        super(title, content, "确定", "取消");
+        super(title, content, "", "");
     }
 
     public FormModal(String title, String content, String trueButtonText, String falseButtonText) {
