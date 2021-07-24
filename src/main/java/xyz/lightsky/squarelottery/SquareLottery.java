@@ -49,27 +49,28 @@ public class SquareLottery extends PluginBase {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(sender instanceof Player) {
-            /*test*/
-            CompoundTag tag = Entity.getDefaultNBT(((Player) sender).getPosition());
-            tag.putCompound("Skin", new CompoundTag());
-            EntityHuman test = new EntityHuman(((Player) sender).chunk, tag);
-            Skin skin = new Skin();
-            skin.setSkinId("OneArmBandit");
-            skin.setSkinData(DataPool.ONE_ARM_BANDIT_IMAG);
-            skin.setGeometryName("geometry.onearmbandit");
-            skin.setGeometryData(DataPool.ONE_ARM_BANDIT_JSON);
-            test.setSkin(skin);
-            test.setScale(1.5F);
-            test.spawnToAll();
-            Server.getInstance().getScheduler().scheduleRepeatingTask(new Task() {
-                @Override
-                public void onRun(int i) {
-                    AnimateLotteryPacket pk = new AnimateLotteryPacket();
-                    pk.setAnimation(DataPool.ONE_ARM_BANDIT_SETUP);
-                    pk.setEntityRuntimeIds(Collections.singletonList(test.getId()));
-                    ((Player) sender).dataPacket(pk);
-                }
-            }, 110);
+//            /*test*/
+//            CompoundTag tag = Entity.getDefaultNBT(((Player) sender).getPosition());
+//            tag.putCompound("Skin", new CompoundTag());
+//            EntityHuman test = new EntityHuman(((Player) sender).chunk, tag);
+//            Skin skin = new Skin();
+//            skin.setSkinId("OneArmBandit");
+//            skin.setSkinData(DataPool.ONE_ARM_BANDIT_IMAG);
+//            skin.setGeometryName("geometry.onearmbandit");
+//            skin.setGeometryData(DataPool.ONE_ARM_BANDIT_JSON);
+//            test.setSkin(skin);
+//            test.setScale(1.5F);
+//            test.spawnToAll();
+//            Server.getInstance().getScheduler().scheduleRepeatingTask(new Task() {
+//                @Override
+//                public void onRun(int i) {
+//                    AnimateLotteryPacket pk = new AnimateLotteryPacket();
+//                    pk.setAnimation(DataPool.ONE_ARM_BANDIT_SETUP);
+//                    pk.setEntityRuntimeIds(Collections.singletonList(test.getId()));
+//                    ((Player) sender).dataPacket(pk);
+//                }
+//            }, 80);
+            OneArmBanditManager.spawn("test");
         }
         return true;
     }

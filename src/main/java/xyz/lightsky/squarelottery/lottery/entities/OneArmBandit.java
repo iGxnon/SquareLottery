@@ -1,36 +1,32 @@
 package xyz.lightsky.squarelottery.lottery.entities;
 
 import cn.nukkit.Player;
+import cn.nukkit.Server;
 import cn.nukkit.entity.EntityHuman;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.utils.Config;
-import lombok.Getter;
-import lombok.Setter;
+import cn.nukkit.scheduler.Task;
 import xyz.lightsky.squarelottery.lottery.entities.ache.OneArmBanditAche;
 import xyz.lightsky.squarelottery.lottery.entities.manager.OneArmBanditManager;
-import xyz.lightsky.squarelottery.lottery.utils.DataPool;
 import xyz.lightsky.squarelottery.lottery.network.protocol.AnimateLotteryPacket;
+import xyz.lightsky.squarelottery.lottery.utils.DataPool;
 
+import java.net.ServerSocket;
 import java.util.Collections;
 
-@Getter
-@Setter
 public class OneArmBandit extends EntityHuman {
 
     private String identifier;
 
-    private Config config;
-
     private String nameTag;
 
-    private float redRate;
+    private double redRate;
 
-    private float blueRate;
+    private double blueRate;
 
-    private float greenRate;
+    private double greenRate;
 
-    private float purpleRate;
+    private double purpleRate;
 
     private Player onLottery = null;
 
@@ -38,16 +34,9 @@ public class OneArmBandit extends EntityHuman {
 
     public OneArmBandit(FullChunk chunk, CompoundTag nbt) {
         super(chunk, nbt);
-        setNameTagVisible();
-        setNameTagAlwaysVisible(true);
-    }
-
-    @Override
-    protected void initEntity() {
-        super.initEntity();
-        identifier = namedTag.getString("Identifier");
+        identifier = nbt.getString("Identifier");
         ache = OneArmBanditManager.aches.get(identifier);
-        config = ache.getConfig();
+        setScale(ache.getScale());
         nameTag = ache.getNameTag();
         redRate = ache.getRedRate();
         purpleRate = ache.getPurpleRate();
@@ -56,20 +45,17 @@ public class OneArmBandit extends EntityHuman {
     }
 
     @Override
-    public boolean attack(float damage) {
-        return super.attack(damage);
-    }
-
-    public void lottery(Player player) {
-
-    }
-
-    @Override
     public boolean onUpdate(int currentTick) {
         if(onLottery == null) {
-            // delay for 5.5 seconds
-            if(currentTick % 110 == 0) {
+            // delay for 2 seconds
+            if(currentTick % 160 == 0) {
                 playAnimation(DataPool.ONE_ARM_BANDIT_SETUP);
+                Server.getInstance().getScheduler().scheduleDelayedTask(new Task() {
+                    @Override
+                    public void onRun(int i) {
+                        playAnimation(DataPool.ONE_ARM_BANDIT_GIFT);
+                    }
+                }, 120);
             }
         }
         return super.onUpdate(currentTick);
@@ -82,12 +68,11 @@ public class OneArmBandit extends EntityHuman {
         getServer().getOnlinePlayers().values().forEach(player -> player.dataPacket(pk));
     }
 
-    public void playAnimation(String animation, int duration) {
+    public void playAnimation(String animation, float belendoutTime) {
         AnimateLotteryPacket pk = new AnimateLotteryPacket();
         pk.setAnimation(animation);
-        // blendoutTime 存在50tick延迟
-        pk.setBlendOutTime((float) (duration - 50));
         pk.setEntityRuntimeIds(Collections.singletonList(getId()));
+        pk.setBlendOutTime(belendoutTime);
         getServer().getOnlinePlayers().values().forEach(player -> player.dataPacket(pk));
     }
 
