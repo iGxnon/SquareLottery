@@ -1,12 +1,10 @@
 name: SquareLottery
 version: 1.0-SNAPSHOT
 api: [1.0.9]
-main: xyz.lightsky.squarelottery.SquareLottery
+main: cc.igxnon.squarelottery.SquareLottery
 author: iGxnon
-commands:
-  sly:
-    usage: /sly
-    permission: sly.command.SquareLottery
 permissions:
-  sly.command.SquareLottery:
-    default: true
+  addLottery.command.SquareLottery:
+    default: op
+  delLottery.command.SquareLottery:
+    default: op
