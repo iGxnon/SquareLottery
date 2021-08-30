@@ -1,6 +1,0 @@
-"%config_load_failed%": "读取失败! 请勿擅自修改配置文件!"
-"%skin_load_failed%": "模型数据读取失败!"
-"%lottery_status_free%": "空闲"
-"%lottery_status_busy%": "工作"
-"%lottery_status_busy_message%": "有人正在使用"
-"%lottery_status_join%": "正在为您抽奖中"
