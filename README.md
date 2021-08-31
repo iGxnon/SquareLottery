@@ -1,2 +1,2 @@
 # SquareLottery
-animation lottery plugin for Nukkit!
+animation lottery plugin for Nukkit
