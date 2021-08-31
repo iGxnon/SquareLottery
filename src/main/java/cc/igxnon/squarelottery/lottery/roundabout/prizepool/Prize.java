@@ -50,6 +50,11 @@ public class Prize {
     }
 
     public void onPrize(Player player) {
+        if(prizeCount == 0) {
+            player.sendMessage(Languages.translate("%lottery_roundabout_prize_count_0%")
+                    .replace("{prizeName}", getName()));
+            return;
+        }
         switch (prizeType) {
             case CMD:
                 String cmd = prizeValue.replace("@p", player.getName());
@@ -69,6 +74,7 @@ public class Prize {
                     PrizePool.waitPrizePlayers.put(player.getName().toLowerCase(Locale.ROOT), this);
                 }
         }
+        reduceCount();
     }
 
     public enum PrizeType {

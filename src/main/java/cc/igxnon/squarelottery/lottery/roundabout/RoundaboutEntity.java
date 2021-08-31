@@ -1,6 +1,9 @@
 package cc.igxnon.squarelottery.lottery.roundabout;
 
 import cc.igxnon.squarelottery.lottery.BaseLotteryEntity;
+import cc.igxnon.squarelottery.lottery.roundabout.form.Menu;
+import cc.igxnon.squarelottery.lottery.roundabout.prizepool.PrizePool;
+import cn.nukkit.Player;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.data.Skin;
 import cn.nukkit.level.Position;
@@ -21,6 +24,8 @@ public class RoundaboutEntity extends BaseLotteryEntity {
     public static final String JSON = "";
     public static final String IDENTIFIER = "";
 
+    private static Menu MENU;
+
     public static final Skin SKIN = new Skin();
 
     static {
@@ -33,14 +38,23 @@ public class RoundaboutEntity extends BaseLotteryEntity {
 
     public RoundaboutEntity(FullChunk chunk, CompoundTag nbt) {
         super(chunk, nbt);
+        MENU = new Menu(this);
     }
 
-    @Override
-    public BaseLotteryEntity createLottery(Position position) {
-        BaseLotteryEntity lotteryEntity = new RoundaboutEntity(position.getChunk(), Entity.getDefaultNBT(position)
+    public void startLottery(Player player, PrizePool prizePool) {
+
+    }
+
+    public static RoundaboutEntity createLottery(Position position) {
+        RoundaboutEntity lotteryEntity = new RoundaboutEntity(position.getChunk(), Entity.getDefaultNBT(position)
                 .putCompound("Skin", new CompoundTag()));
         lotteryEntity.setSkin(SKIN);
         return lotteryEntity;
+    }
+
+    @Override
+    public void onClick(Player player) {
+        MENU.sendMenu(player);
     }
 
     public enum Color {

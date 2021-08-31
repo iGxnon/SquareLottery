@@ -20,12 +20,14 @@ public class PrizePool {
     public static Config config;
     public static Config setting;
     public static final Map<String, Prize> allPrize = new HashMap<>();
+    public static final Map<String, PrizePool> allPrizePool = new HashMap<>();
     public static final Map<String, Prize> waitPrizePlayers = new HashMap<>();
 
     private static double defaultRedRate = 0.25D;
     private static double defaultBlueRate = 0.25D;
     private static double defaultYellowRate = 0.25D;
     private static double defaultOrangeRate = 0.25D;
+
 
     public String name;
     public Map<String, Prize> prizePool = new HashMap<>();
@@ -136,8 +138,10 @@ public class PrizePool {
         config.save();
     }
 
+
     public PrizePool(String name) {
         this.name = name;
+        allPrizePool.put(name, this);
     }
 
     public static PrizePool createPrizePool(String name) {

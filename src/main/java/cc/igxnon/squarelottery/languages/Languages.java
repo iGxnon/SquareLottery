@@ -69,6 +69,15 @@ public class Languages {
             add("%lottery_roundabout_prizepool_config_warning%");
             add("%lottery_roundabout_prizepool_onprize%");
             add("%lottery_roundabout_prizepool_onprize_item_cannotadd%");
+            add("%lottery_roundabout_form_menu_title%");
+            add("%lottery_roundabout_form_prizepool_content%");
+            add("%lottery_roundabout_form_prizepool_start_button%");
+            add("%lottery_roundabout_form_prize_back%");
+            add("%lottery_roundabout_form_prize_lottery_immediately%");
+            add("%lottery_roundabout_form_prize_content%");
+            add("%lottery_roundabout_form_prize_prizearranged_true%");
+            add("%lottery_roundabout_form_prize_prizearranged_false%");
+            add("%lottery_roundabout_prize_count_0%");
         }
 
         public boolean equals(String[] keys) {

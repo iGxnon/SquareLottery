@@ -8,8 +8,11 @@ import cn.nukkit.Server;
  */
 public class CommandBuilder {
 
+    public static final String PREFIX = "SquarePet";
+
     public static void init() {
-        Server.getInstance().getCommandMap().register("SquarePet", new AddLotteryCommand());
+        Server.getInstance().getCommandMap().register(PREFIX, new AddLotteryCommand());
+        Server.getInstance().getCommandMap().register(PREFIX, new DelLotteryCommand());
     }
 
 }

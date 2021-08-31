@@ -1,5 +1,6 @@
 package cc.igxnon.squarelottery.lottery;
 
+import cn.nukkit.Player;
 import cn.nukkit.entity.EntityHuman;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.format.FullChunk;
@@ -15,5 +16,5 @@ public abstract class BaseLotteryEntity extends EntityHuman {
         super(chunk, nbt);
     }
 
-    public abstract BaseLotteryEntity createLottery(Position position);
+    public abstract void onClick(Player player);
 }

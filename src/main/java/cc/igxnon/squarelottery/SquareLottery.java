@@ -1,5 +1,6 @@
 package cc.igxnon.squarelottery;
 
+import cc.igxnon.squarelottery.commands.CommandBuilder;
 import cc.igxnon.squarelottery.languages.Languages;
 import cc.igxnon.squarelottery.lottery.roundabout.prizepool.PrizePool;
 import cn.nukkit.plugin.PluginBase;
@@ -26,6 +27,7 @@ public class SquareLottery extends PluginBase {
     public void onEnable() {
         Languages.init();
         PrizePool.init();
+        CommandBuilder.init();
     }
 
     @Override
