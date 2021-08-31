@@ -2,8 +2,6 @@ package cc.igxnon.squarelottery;
 
 import cc.igxnon.squarelottery.languages.Languages;
 import cc.igxnon.squarelottery.lottery.roundabout.prizepool.PrizePool;
-import cn.nukkit.command.Command;
-import cn.nukkit.command.CommandSender;
 import cn.nukkit.plugin.PluginBase;
 
 /**
@@ -32,7 +30,7 @@ public class SquareLottery extends PluginBase {
 
     @Override
     public void onDisable() {
-        super.onDisable();
+        PrizePool.saveWaitList();
     }
 
 }

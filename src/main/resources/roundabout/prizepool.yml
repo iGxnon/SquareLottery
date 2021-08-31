@@ -1,5 +1,5 @@
-"prizePoolName1":
-  "info": "Test Prize Pool"
+"prizeName1":
+  "info": "Test Prize 1"
   "showRate": false
   "redRate": 0.25
   "blueRate": 0.25
@@ -15,20 +15,19 @@
     - ["Blue", "Red", "Blue"]
     - ["Yellow", "Yellow", "Yellow"]
     - ["Orange", "Orange", "Orange"]
-"prizePoolName2":
-  "info": "Test Prize Pool"
+"prizeName2":
+  "info": "Test Prize 2"
   "showRate": false
   "redRate": 0.25
   "blueRate": 0.25
   "yellowRate": 0.25
   "orangeRate": 0.25
-  "prizeType": "cmd"
-  "prizeValue": "give @p 18 1"
+  "prizeType": "item"
+  "prizeValue": "18:0:10"
   "prizeCount": 10
   "prizeSize": 2
-  "prizeArranged": true
+  "prizeArranged": false
   "prizeArrangements":
     - ["Red", "Blue"]
-    - ["Blue", "Red"]
     - ["Yellow", "Yellow"]
     - ["Orange", "Orange"]

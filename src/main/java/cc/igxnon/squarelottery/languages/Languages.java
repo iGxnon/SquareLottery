@@ -32,7 +32,9 @@ public class Languages {
             init(language);
         } catch (LanguageNotFoundException | LanguageIncompleteException e) {
             e.printStackTrace();
+            return;
         }
+        SquareLottery.getInstance().getLogger().info("languages init...");
     }
 
     public static void init(String language) throws LanguageNotFoundException, LanguageIncompleteException {
@@ -63,6 +65,10 @@ public class Languages {
             add("%lottery_status_busy%");
             add("%lottery_status_busy_message%");
             add("%lottery_status_join%");
+            add("%lottery_roundabout_prizepool_init%");
+            add("%lottery_roundabout_prizepool_config_warning%");
+            add("%lottery_roundabout_prizepool_onprize%");
+            add("%lottery_roundabout_prizepool_onprize_item_cannotadd%");
         }
 
         public boolean equals(String[] keys) {
