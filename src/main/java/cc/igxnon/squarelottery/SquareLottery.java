@@ -30,9 +30,21 @@ public class SquareLottery extends PluginBase {
         CommandBuilder.init();
     }
 
+
+//    public static void main(String[] args) throws URISyntaxException, IOException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+//        File file = new File(System.getProperty("user.dir") + "/skin2.png");
+//        BufferedImage bufferedImage = ImageIO.read(file);
+//        Class<Skin> skinClass = Skin.class;
+//        Method method = skinClass.getDeclaredMethod("parseBufferedImage", BufferedImage.class);
+//        method.setAccessible(true);
+//        Skin skin = skinClass.newInstance();
+//        SerializedImage image = (SerializedImage) method.invoke(skin, bufferedImage);
+//        System.out.println(new String(Base64.getEncoder().encode(image.data)));
+//    }
+
     @Override
     public void onDisable() {
-        PrizePool.saveWaitList();
+        PrizePool.save();
     }
 
 }

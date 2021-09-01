@@ -1,5 +1,6 @@
 package cc.igxnon.squarelottery.commands;
 
+import cn.nukkit.Player;
 import cn.nukkit.command.Command;
 import cn.nukkit.command.CommandSender;
 
@@ -16,6 +17,9 @@ public class DelLotteryCommand extends Command {
 
     @Override
     public boolean execute(CommandSender commandSender, String s, String[] strings) {
-        return false;
+        if(commandSender instanceof Player) {
+            commandSender.sendMessage(((Player) commandSender).getPosition().toString());
+        }
+        return true;
     }
 }

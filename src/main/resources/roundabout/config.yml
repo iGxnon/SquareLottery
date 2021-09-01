@@ -2,4 +2,13 @@ defaultRedRate: 0.25
 defaultBlueRate: 0.25
 defaultYellowRate: 0.25
 defaultOrangeRate: 0.25
+prizePools:
+  ABC:
+    - prizeName1
+    - prizeName2
+  DEF:
+    - prizeName1
+machines:
+  - 81#69#301#180#world
 waitPrizePlayers:
+  igxnon: prizeName2

@@ -9,6 +9,8 @@ import cn.lanink.gamecore.form.windows.AdvancedFormWindowModal;
 import cn.lanink.gamecore.form.windows.AdvancedFormWindowSimple;
 import cn.nukkit.Player;
 
+import java.util.Locale;
+
 /**
  * @author iGxnon
  * @date 2021/8/31
@@ -16,8 +18,6 @@ import cn.nukkit.Player;
 public class Menu {
 
     private RoundaboutEntity entity;
-
-    public Menu() {}
 
     public Menu(RoundaboutEntity baseLotteryEntity) {
         this.entity = baseLotteryEntity;
@@ -30,6 +30,13 @@ public class Menu {
                 sendPrizePool(onClickPlayer, prizePool);
             });
         });
+        if(PrizePool.waitPrizePlayers.containsKey(player.getName().toLowerCase(Locale.ROOT))) {
+            advancedFormWindowSimple.addButton(Languages.translate("%lottery_roundabout_form_pickup%"), onClickPlayer -> {
+                Prize prize = PrizePool.waitPrizePlayers.get(player.getName().toLowerCase(Locale.ROOT));
+                prize.onPrize(player);
+                PrizePool.waitPrizePlayers.remove(player.getName().toLowerCase(Locale.ROOT));
+            });
+        }
         player.showFormWindow(advancedFormWindowSimple);
     }
 
@@ -44,6 +51,7 @@ public class Menu {
         advancedFormWindowSimple.addButton(Languages.translate("%lottery_roundabout_form_prizepool_start_button%"), onClickPlayer -> {
             entity.startLottery(onClickPlayer, prizePool);
         });
+        advancedFormWindowSimple.addButton(Languages.translate("%lottery_roundabout_form_prizepool_back%"), this::sendMenu);
         player.showFormWindow(advancedFormWindowSimple);
     }
 
@@ -67,7 +75,7 @@ public class Menu {
                 .replace("{orangeRate}", String.valueOf(prize.getOrangeRate()))
                 .replace("{prizeCount}", String.valueOf(prize.getPrizeCount()))
                 .replace("{prizeArranged}", prize.isPrizeArranged() ? Languages.translate("%lottery_roundabout_form_prize_prizearranged_true%") : Languages.translate("%lottery_roundabout_form_prize_prizearranged_false%"))
-                .replace("{prizeArrangements}", prize.getPrizeArrangements().toString());//todo replace 'Red' .etc
+                .replace("{prizeArrangements}", prize.getPrizeArrangementsList());
         AdvancedFormWindowModal advancedFormWindowModal = new AdvancedFormWindowModal(
                 prize.getName(),
                 content,

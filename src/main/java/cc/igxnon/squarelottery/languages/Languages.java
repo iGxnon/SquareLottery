@@ -78,6 +78,10 @@ public class Languages {
             add("%lottery_roundabout_form_prize_prizearranged_true%");
             add("%lottery_roundabout_form_prize_prizearranged_false%");
             add("%lottery_roundabout_prize_count_0%");
+            add("%lottery_roundabout_prizepool_add_failed%");
+            add("%lottery.roundabout_prize_init_failed%");
+            add("%lottery_roundabout_form_pickup%");
+            add("%lottery_roundabout_form_prizepool_back%");
         }
 
         public boolean equals(String[] keys) {

@@ -68,6 +68,8 @@ public class Prize {
                         Integer.parseInt(prizeValue.split(":")[0]));
                 if(player.getInventory().canAddItem(item)) {
                     player.getInventory().addItem(item);
+                    player.sendMessage(Languages.translate("%lottery_roundabout_prizepool_onprize%")
+                            .replace("{prizeName}", getName()));
                 }else {
                     player.sendMessage(Languages.translate("%lottery_roundabout_prizepool_onprize_item_cannotadd%")
                             .replace("{prizeName}", getName()));
@@ -75,6 +77,14 @@ public class Prize {
                 }
         }
         reduceCount();
+    }
+
+    public String getPrizeArrangementsList() {
+        StringBuilder builder = new StringBuilder().append("\n");
+        for(List<String> childList : prizeArrangements) {
+            builder.append("  - ").append(childList).append("\n");
+        }
+        return builder.toString();
     }
 
     public enum PrizeType {

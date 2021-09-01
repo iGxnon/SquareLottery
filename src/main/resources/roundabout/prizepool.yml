@@ -25,9 +25,9 @@
   "prizeType": "item"
   "prizeValue": "18:0:10"
   "prizeCount": 10
-  "prizeSize": 2
+  "prizeSize": 3
   "prizeArranged": false
   "prizeArrangements":
-    - ["Red", "Blue"]
-    - ["Yellow", "Yellow"]
-    - ["Orange", "Orange"]
+    - ["Red", "Blue", "Red"]
+    - ["Yellow", "Yellow", "Blue"]
+    - ["Orange", "Orange", "Orange"]
