@@ -37,7 +37,7 @@ public class AnimateEntityPacket extends DataPacket {
         this.putString(this.nextState == null ? "default" : this.nextState);
         this.putString(this.stopExpression == null ? "" : this.stopExpression);
         this.putString(this.controller == null ? "" : this.controller);
-        this.putLFloat(this.blendOutTime == 0F ? 100F : this.blendOutTime);
+        this.putLFloat(this.blendOutTime == 0F ? 0.1F : this.blendOutTime);
         this.putUnsignedVarInt(this.entityRuntimeIds.size());
         for (long entityRuntimeId : this.entityRuntimeIds){
             this.putEntityRuntimeId(entityRuntimeId);

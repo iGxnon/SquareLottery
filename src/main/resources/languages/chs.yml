@@ -21,3 +21,6 @@
 "%lottery_roundabout_prize_count_0%": "对不起，奖品: {prizeName} 已经兑换完了"
 "%lottery_roundabout_prizepool_add_failed%": "无法向该奖池内添加该奖品！奖品的兑换序列尺寸与奖品池的不一致"
 "%lottery_roundabout_form_pickup%": "领取未领取的奖品"
+"%lottery_command_console_add%": "请在游戏内使用"
+"%lottery_command_add_help%": "§c/addLottery [type] {n}输入 /lotteryTypes 查看所有种类抽奖机"
+"%lottery_command_del_choose%": "请点击一个抽奖机删除"

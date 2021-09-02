@@ -6,9 +6,7 @@ import cc.igxnon.squarelottery.lottery.roundabout.RoundaboutEntity;
 import cn.nukkit.Server;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Location;
-import cn.nukkit.level.Position;
 import cn.nukkit.utils.Config;
-import lombok.val;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -156,12 +154,7 @@ public class PrizePool {
     }
 
     public static void saveMachine(RoundaboutEntity roundaboutEntity) {
-        List<String> machines = config.getStringList("machines");
-        String infoStr = (int) roundaboutEntity.x + "#" + (int) roundaboutEntity.y + "#" + (int) roundaboutEntity.z + "#"
-                + (int) roundaboutEntity.yaw + "#" + roundaboutEntity.level.getName();
-        machines.add(infoStr);
-        config.set("machines", machines);
-        config.save();
+        roundaboutEntity.save();
     }
 
     public static void initWaitList() {
@@ -194,9 +187,10 @@ public class PrizePool {
         prizeMap.put("prizeType", prize.getPrizeType().name().toLowerCase(Locale.ROOT));
         prizeMap.put("prizeValue", prize.getPrizeValue());
         prizeMap.put("prizeCount", prize.getPrizeCount());
+        // nk往Config写入的二维数组很奇怪，于是便不保存这个数据了
         //prizeMap.put("prizeSize", prize.getPrizeSize());
-        prizeMap.put("prizeArranged", prize.isPrizeArranged());
         //prizeMap.put("prizeArrangements", prize.getPrizeArrangements());
+        prizeMap.put("prizeArranged", prize.isPrizeArranged());
         prizePoolConfig.set(prize.getName(), prizeMap);
         prizePoolConfig.save();
     }

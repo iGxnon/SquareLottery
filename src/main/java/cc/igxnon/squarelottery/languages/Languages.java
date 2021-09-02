@@ -82,6 +82,9 @@ public class Languages {
             add("%lottery.roundabout_prize_init_failed%");
             add("%lottery_roundabout_form_pickup%");
             add("%lottery_roundabout_form_prizepool_back%");
+            add("%lottery_command_console_add%");
+            add("%lottery_command_add_help%");
+            add("%lottery_command_del_choose%");
         }
 
         public boolean equals(String[] keys) {

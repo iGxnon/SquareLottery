@@ -16,4 +16,14 @@ public abstract class BaseLotteryEntity extends EntityHuman {
     }
 
     public abstract void onClick(Player player);
+
+    public abstract void save();
+
+    public enum Type {
+        ROUNDABOUT;
+
+        public static Type[] all() {
+            return new Type[]{Type.ROUNDABOUT};
+        }
+    }
 }

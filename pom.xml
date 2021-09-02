@@ -16,6 +16,7 @@
     </repositories>
 
     <dependencies>
+
         <dependency>
             <groupId>cn.lanink</groupId>
             <artifactId>MemoriesOfTime-GameCore</artifactId>

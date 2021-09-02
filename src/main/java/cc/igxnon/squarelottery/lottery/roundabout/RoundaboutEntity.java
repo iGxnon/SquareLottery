@@ -1,9 +1,13 @@
 package cc.igxnon.squarelottery.lottery.roundabout;
 
+import cc.igxnon.squarelottery.animations.AnimationUtils;
+import cc.igxnon.squarelottery.animations.Info;
+import cc.igxnon.squarelottery.languages.Languages;
 import cc.igxnon.squarelottery.lottery.BaseLotteryEntity;
 import cc.igxnon.squarelottery.lottery.roundabout.form.Menu;
 import cc.igxnon.squarelottery.lottery.roundabout.prizepool.PrizePool;
 import cn.nukkit.Player;
+import cn.nukkit.Server;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.data.Skin;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
@@ -12,8 +16,11 @@ import cn.nukkit.level.Location;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.nbt.tag.CompoundTag;
+import cn.nukkit.scheduler.Task;
+import cn.nukkit.utils.Config;
 
 import java.util.Base64;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -34,7 +41,6 @@ public class RoundaboutEntity extends BaseLotteryEntity {
 
     public Player onUse;
 
-
     static {
         SKIN.setSkinId(UUID.randomUUID().toString());
         SKIN.setSkinData(Base64.getDecoder().decode(SKIN_BASE64.toString()));
@@ -46,15 +52,35 @@ public class RoundaboutEntity extends BaseLotteryEntity {
     public RoundaboutEntity(FullChunk chunk, CompoundTag nbt) {
         super(chunk, nbt);
         MENU = new Menu(this);
+        setNameTagVisible();
+        setNameTagAlwaysVisible();
     }
 
-    /**
-     * 动画只发给一个玩家 or 动画发给全部玩家并设置抽奖机使用人
-     * @param player
-     * @param prizePool
-     */
     public void startLottery(Player player, PrizePool prizePool) {
-        player.sendMessage("test");
+        if(onUse != null) {
+            player.sendMessage(Languages.translate("%lottery_status_busy_message%"));
+            return;
+        }
+        onUse = player;
+        Server.getInstance().getScheduler().scheduleDelayedTask(new Task() {
+            @Override
+            public void onRun(int i) {
+                onUse = null;
+            }
+        }, 3 * prizePool.prizeSize * 20);
+        AnimationUtils.builder()
+                .animation(Info.ROUNDABOUT_LOTTERY_STATE_BLUE)
+                .entityRuntimeId(this.getId())
+                .deliverToAll();
+        Server.getInstance().getScheduler().scheduleDelayedTask(new Task() {
+            @Override
+            public void onRun(int i) {
+                AnimationUtils.builder()
+                        .animation(Info.ROUNDABOUT_REST)
+                        .entityRuntimeId(getId())
+                        .deliverToAll();
+            }
+        }, 3 * 20);
     }
 
     public static RoundaboutEntity createLottery(Position position) {
@@ -77,6 +103,28 @@ public class RoundaboutEntity extends BaseLotteryEntity {
         }
         source.setCancelled();
         return super.attack(source);
+    }
+
+    @Override
+    public void save() {
+        Config config = PrizePool.config;
+        List<String> machines = config.getStringList("machines");
+        machines.add(getInfo());
+        config.set("machines", machines);
+        config.save();
+    }
+
+    public String getInfo(){
+        return (int) this.x + "#" + (int) this.y + "#" + (int) this.z + "#"
+                + (int) this.yaw + "#" + this.level.getName();
+    }
+
+    @Override
+    public boolean onUpdate(int currentTick) {
+        if(currentTick % 20 == 0) {
+            setNameTag(onUse == null ? Languages.translate("%lottery_status_free%") : Languages.translate("%lottery_status_busy%"));
+        }
+        return true;
     }
 
     @Override

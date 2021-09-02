@@ -13,6 +13,7 @@ public class CommandBuilder {
     public static void init() {
         Server.getInstance().getCommandMap().register(PREFIX, new AddLotteryCommand());
         Server.getInstance().getCommandMap().register(PREFIX, new DelLotteryCommand());
+        Server.getInstance().getCommandMap().register(PREFIX, new LotteryTypesCommand());
     }
 
 }

@@ -4,6 +4,7 @@ import cc.igxnon.squarelottery.languages.Languages;
 import cc.igxnon.squarelottery.lottery.roundabout.RoundaboutEntity;
 import cc.igxnon.squarelottery.lottery.roundabout.prizepool.Prize;
 import cc.igxnon.squarelottery.lottery.roundabout.prizepool.PrizePool;
+import cc.igxnon.squarelottery.utils.ClickEntityUtils;
 import cc.igxnon.squarelottery.utils.StringUtils;
 import cn.lanink.gamecore.form.windows.AdvancedFormWindowModal;
 import cn.lanink.gamecore.form.windows.AdvancedFormWindowSimple;
@@ -24,6 +25,7 @@ public class Menu {
     }
 
     public void sendMenu(Player player) {
+        if(ClickEntityUtils.clickList.containsKey(player)) return;
         AdvancedFormWindowSimple advancedFormWindowSimple = new AdvancedFormWindowSimple(Languages.translate("%lottery_roundabout_form_menu_title%"));
         PrizePool.allPrizePool.forEach((name, prizePool) -> {
             advancedFormWindowSimple.addButton(name, onClickPlayer -> {

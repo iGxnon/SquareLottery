@@ -1,8 +1,11 @@
 package cc.igxnon.squarelottery;
 
+import cc.igxnon.squarelottery.animations.AnimationUtils;
 import cc.igxnon.squarelottery.commands.CommandBuilder;
 import cc.igxnon.squarelottery.languages.Languages;
 import cc.igxnon.squarelottery.lottery.roundabout.prizepool.PrizePool;
+import cc.igxnon.squarelottery.utils.ClickEntityUtils;
+import cn.nukkit.Server;
 import cn.nukkit.plugin.PluginBase;
 
 /**
@@ -28,19 +31,16 @@ public class SquareLottery extends PluginBase {
         Languages.init();
         PrizePool.init();
         CommandBuilder.init();
+        if(AnimationUtils.buildResourcePack()) {
+            getLogger().warning("Building resource packet...");
+        }else {
+            getLogger().warning("Resource packet built.");
+        }
+        if (!Server.getInstance().getForceResources()) {
+            getLogger().warning("Detected that 'force-resources' is not true, we suggest you to toggle it to true");
+        }
+        getServer().getPluginManager().registerEvents(new ClickEntityUtils(), this);
     }
-
-
-//    public static void main(String[] args) throws URISyntaxException, IOException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-//        File file = new File(System.getProperty("user.dir") + "/skin2.png");
-//        BufferedImage bufferedImage = ImageIO.read(file);
-//        Class<Skin> skinClass = Skin.class;
-//        Method method = skinClass.getDeclaredMethod("parseBufferedImage", BufferedImage.class);
-//        method.setAccessible(true);
-//        Skin skin = skinClass.newInstance();
-//        SerializedImage image = (SerializedImage) method.invoke(skin, bufferedImage);
-//        System.out.println(new String(Base64.getEncoder().encode(image.data)));
-//    }
 
     @Override
     public void onDisable() {

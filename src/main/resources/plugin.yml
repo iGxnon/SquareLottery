@@ -4,7 +4,5 @@ api: [1.0.9]
 main: cc.igxnon.squarelottery.SquareLottery
 author: iGxnon
 permissions:
-  addLottery.command.SquareLottery:
-    default: op
-  delLottery.command.SquareLottery:
+  squarelottery.command.op:
     default: op
