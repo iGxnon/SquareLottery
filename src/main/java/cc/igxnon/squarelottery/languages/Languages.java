@@ -59,8 +59,7 @@ public class Languages {
     public static class LanguageKeys extends ArrayList<String> {
 
         public LanguageKeys() {
-            add("%config_load_failed%");
-            add("%skin_load_failed%");
+            add("%lottery_failed%");
             add("%lottery_status_free%");
             add("%lottery_status_busy%");
             add("%lottery_status_busy_message%");
@@ -85,6 +84,12 @@ public class Languages {
             add("%lottery_command_console_add%");
             add("%lottery_command_add_help%");
             add("%lottery_command_del_choose%");
+            add("%lottery_roundabout_color_info%");
+            add("%lottery_roundabout_color_red%");
+            add("%lottery_roundabout_color_blue%");
+            add("%lottery_roundabout_color_yellow%");
+            add("%lottery_roundabout_color_orange%");
+            add("%lottery_roundabout_name%");
         }
 
         public boolean equals(String[] keys) {

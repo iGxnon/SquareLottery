@@ -1,10 +1,10 @@
 package cc.igxnon.squarelottery.lottery.roundabout;
 
 import cc.igxnon.squarelottery.animations.AnimationUtils;
-import cc.igxnon.squarelottery.animations.Info;
 import cc.igxnon.squarelottery.languages.Languages;
 import cc.igxnon.squarelottery.lottery.BaseLotteryEntity;
 import cc.igxnon.squarelottery.lottery.roundabout.form.Menu;
+import cc.igxnon.squarelottery.lottery.roundabout.prizepool.Prize;
 import cc.igxnon.squarelottery.lottery.roundabout.prizepool.PrizePool;
 import cn.nukkit.Player;
 import cn.nukkit.Server;
@@ -19,10 +19,8 @@ import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.scheduler.Task;
 import cn.nukkit.utils.Config;
 
-import java.util.Base64;
-import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author iGxnon
@@ -35,11 +33,13 @@ public class RoundaboutEntity extends BaseLotteryEntity {
     public static final String JSON = "{\"format_version\":\"1.12.0\",\"minecraft:geometry\":[{\"description\":{\"identifier\":\"geometry.lottery.roundabout\",\"texture_width\":128,\"texture_height\":128,\"visible_bounds_width\":6,\"visible_bounds_height\":7.5,\"visible_bounds_offset\":[0,2.25,0]},\"bones\":[{\"name\":\"cjjz\",\"pivot\":[0,0,0]},{\"name\":\"cjj\",\"parent\":\"cjjz\",\"pivot\":[0,25,2],\"cubes\":[{\"origin\":[-15.1,10,1.9],\"size\":[30,30,0],\"pivot\":[-0.1,25,1.9],\"rotation\":[0,0,28],\"uv\":{\"north\":{\"uv\":[50,49],\"uv_size\":[76,76]},\"east\":{\"uv\":[0,0],\"uv_size\":[0,30]},\"south\":{\"uv\":[0,71],\"uv_size\":[30,30]},\"west\":{\"uv\":[0,0],\"uv_size\":[0,30]},\"up\":{\"uv\":[30,0],\"uv_size\":[-30,0]},\"down\":{\"uv\":[30,0],\"uv_size\":[-30,0]}}}]},{\"name\":\"cjjza\",\"parent\":\"cjjz\",\"pivot\":[0,0,0],\"cubes\":[{\"origin\":[-1,2,2],\"size\":[2,25,3],\"uv\":{\"north\":{\"uv\":[3,114],\"uv_size\":[6,12]},\"east\":{\"uv\":[3,114],\"uv_size\":[6,12]},\"south\":{\"uv\":[3,114],\"uv_size\":[6,12]},\"west\":{\"uv\":[3,114],\"uv_size\":[6,12]},\"up\":{\"uv\":[9,126],\"uv_size\":[-6,-12]},\"down\":{\"uv\":[9,126],\"uv_size\":[-6,-12]}}},{\"origin\":[-7,0,-9],\"size\":[14,2,14],\"pivot\":[0,0,0],\"rotation\":[0,-3,0],\"uv\":{\"north\":{\"uv\":[1,113],\"uv_size\":[12,3]},\"east\":{\"uv\":[1,113],\"uv_size\":[14,3]},\"south\":{\"uv\":[1,113],\"uv_size\":[14,3]},\"west\":{\"uv\":[1,113],\"uv_size\":[15,3]},\"up\":{\"uv\":[15,127],\"uv_size\":[-14,-14]},\"down\":{\"uv\":[15,127],\"uv_size\":[-14,-14]}}}]},{\"name\":\"zheng\",\"parent\":\"cjjza\",\"pivot\":[-0.2,20,0],\"cubes\":[{\"origin\":[-0.44634,28.2,1.54087],\"size\":[1,1,0.5],\"pivot\":[0.05366,28.7,1.54087],\"rotation\":[0,0,45],\"uv\":{\"north\":{\"uv\":[21,116],\"uv_size\":[4,12]},\"east\":{\"uv\":[21,116],\"uv_size\":[4,12]},\"south\":{\"uv\":[21,116],\"uv_size\":[4,12]},\"west\":{\"uv\":[21,116],\"uv_size\":[4,12]},\"up\":{\"uv\":[25,128],\"uv_size\":[-4,-12]},\"down\":{\"uv\":[25,128],\"uv_size\":[-4,-12]}}},{\"origin\":[-0.44634,25.4,1.54087],\"size\":[1,3.2,0.5],\"uv\":{\"north\":{\"uv\":[21,117],\"uv_size\":[7,9]},\"east\":{\"uv\":[21,117],\"uv_size\":[7,9]},\"south\":{\"uv\":[21,117],\"uv_size\":[7,9]},\"west\":{\"uv\":[21,117],\"uv_size\":[7,9]},\"up\":{\"uv\":[28,126],\"uv_size\":[-7,-9]},\"down\":{\"uv\":[28,126],\"uv_size\":[-7,-9]}}}]}]}]}";
     public static final String IDENTIFIER = "geometry.lottery.roundabout";
 
-    public static Menu MENU;
+    public Menu MENU;
 
     public static final Skin SKIN = new Skin();
 
     public Player onUse;
+
+    public Random random = new Random();
 
     static {
         SKIN.setSkinId(UUID.randomUUID().toString());
@@ -62,25 +62,63 @@ public class RoundaboutEntity extends BaseLotteryEntity {
             return;
         }
         onUse = player;
+        Color[] result = new Color[prizePool.prizeSize];
+        int redRange = (int) (PrizePool.defaultRedRate * 100);
+        int blueRange = (int) (PrizePool.defaultBlueRate * 100) + redRange;
+        int yellowRange = (int) (PrizePool.defaultYellowRate * 100) + blueRange;
+
+        for(int i = 0; i < prizePool.prizeSize; i ++) {
+            int range = random.nextInt(100);
+            if(range < redRange) {
+                result[i] = Color.RED;
+            }else if(range < blueRange) {
+                result[i] = Color.BLUE;
+            }else if(range < yellowRange) {
+                result[i] = Color.YELLOW;
+            }else {
+                result[i] = Color.ORANGE;
+            }
+        }
+
+        player.sendMessage(Languages.translate("%lottery_status_join%"));
+
+        for(int j = 0; j < result.length; j ++) {
+            int finalJ = j;
+            Server.getInstance().getScheduler().scheduleDelayedTask(new Task() {
+                @Override
+                public void onRun(int i) {
+                    AnimationUtils.builder()
+                            .animation(result[finalJ].toAnimationStr())
+                            .entityRuntimeId(getId())
+                            .deliverToAll();
+                    Server.getInstance().getScheduler().scheduleDelayedTask(new Task() {
+                        @Override
+                        public void onRun(int i) {
+                            player.sendMessage(Languages.translate("%lottery_roundabout_color_info%")
+                                    .replace("{color}", Languages.translate("%lottery_roundabout_color_"+result[finalJ].name().toLowerCase(Locale.ROOT)+"%")));
+                        }
+                    }, 55);
+                }
+            }, 3 * 20 * j + 20);
+        }
+
         Server.getInstance().getScheduler().scheduleDelayedTask(new Task() {
             @Override
             public void onRun(int i) {
                 onUse = null;
+                AtomicReference<Prize> onPrize = new AtomicReference<>(null);
+                prizePool.prizePool.forEach((ignore, prize) -> {
+                    if(prize.hasArrangement(result)) {
+                        onPrize.set(prize);
+                    }
+                });
+                if(onPrize.get() != null) {
+                    onPrize.get().onPrize(player);
+                }else {
+                    player.sendMessage(Languages.translate("%lottery_failed%"));
+                }
             }
-        }, 3 * prizePool.prizeSize * 20);
-        AnimationUtils.builder()
-                .animation(Info.ROUNDABOUT_LOTTERY_STATE_BLUE)
-                .entityRuntimeId(this.getId())
-                .deliverToAll();
-        Server.getInstance().getScheduler().scheduleDelayedTask(new Task() {
-            @Override
-            public void onRun(int i) {
-                AnimationUtils.builder()
-                        .animation(Info.ROUNDABOUT_REST)
-                        .entityRuntimeId(getId())
-                        .deliverToAll();
-            }
-        }, 3 * 20);
+        }, 3 * prizePool.prizeSize * 20 + 20);
     }
 
     public static RoundaboutEntity createLottery(Position position) {
@@ -122,7 +160,12 @@ public class RoundaboutEntity extends BaseLotteryEntity {
     @Override
     public boolean onUpdate(int currentTick) {
         if(currentTick % 20 == 0) {
-            setNameTag(onUse == null ? Languages.translate("%lottery_status_free%") : Languages.translate("%lottery_status_busy%"));
+            setNameTag(onUse == null ? Languages.translate("%lottery_status_free%")
+                    .replace("{n}", "\n")
+                    .replace("{type}", Languages.translate("%lottery_roundabout_name%"))
+                    : Languages.translate("%lottery_status_busy%")
+                    .replace("{n}", "\n")
+                    .replace("{type}", Languages.translate("%lottery_roundabout_name%")));
         }
         return true;
     }
@@ -133,10 +176,32 @@ public class RoundaboutEntity extends BaseLotteryEntity {
     }
 
     public enum Color {
-        RED,
-        YELLOW,
-        BLUE,
-        ORANGE;
+        RED{
+            @Override
+            public String toAnimationStr() {
+                return "animation.roundabout.lottery.red";
+            }
+        },
+        YELLOW{
+            @Override
+            public String toAnimationStr() {
+                return "animation.roundabout.lottery.yellow";
+            }
+        },
+        BLUE{
+            @Override
+            public String toAnimationStr() {
+                return "animation.roundabout.lottery.blue";
+            }
+        },
+        ORANGE{
+            @Override
+            public String toAnimationStr() {
+                return "animation.roundabout.lottery.orange";
+            }
+        };
+
+        public abstract String toAnimationStr();
 
         public static Color of(String strKey) {
             strKey = strKey.toLowerCase(Locale.ROOT);

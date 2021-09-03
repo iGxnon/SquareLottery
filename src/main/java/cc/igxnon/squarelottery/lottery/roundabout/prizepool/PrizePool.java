@@ -25,10 +25,10 @@ public class PrizePool {
     public static final Map<String, PrizePool> allPrizePool = new HashMap<>();
     public static final Map<String, Prize> waitPrizePlayers = new HashMap<>();
 
-    private static double defaultRedRate = 0.25D;
-    private static double defaultBlueRate = 0.25D;
-    private static double defaultYellowRate = 0.25D;
-    private static double defaultOrangeRate = 0.25D;
+    public static double defaultRedRate = 0.25D;
+    public static double defaultBlueRate = 0.25D;
+    public static double defaultYellowRate = 0.25D;
+    public static double defaultOrangeRate = 0.25D;
 
     public String name;
     public int prizeSize;
@@ -63,27 +63,6 @@ public class PrizePool {
         }
         prizePoolConfig.getAll().forEach((key, secondMap) -> {
             String info = (String) ((Map<String, Object>) secondMap).get("info");
-            boolean showRate = (boolean) ((Map<String, Object>) secondMap).get("showRate");
-            double redRate = defaultRedRate;
-            double blueRate = defaultBlueRate;
-            double yellowRate = defaultYellowRate;
-            double orangeRate = defaultOrangeRate;
-            if(((Map<String, Object>) secondMap).containsKey("redRate")
-                && ((Map<String, Object>) secondMap).containsKey("blueRate")
-                && ((Map<String, Object>) secondMap).containsKey("yellowRate")
-                && ((Map<String, Object>) secondMap).containsKey("orangeRate")) {
-                redRate = (double) ((Map<String, Object>) secondMap).get("redRate");
-                blueRate = (double) ((Map<String, Object>) secondMap).get("blueRate");
-                yellowRate = (double) ((Map<String, Object>) secondMap).get("yellowRate");
-                orangeRate = (double) ((Map<String, Object>) secondMap).get("orangeRate");
-                if(redRate + blueRate + yellowRate + orangeRate != 1.0D) {
-                    SquareLottery.getInstance().getLogger().warning(Languages.translate("%lottery_roundabout_prizepoll_config_warning%"));
-                    redRate = defaultRedRate;
-                    blueRate = defaultBlueRate;
-                    yellowRate = defaultYellowRate;
-                    orangeRate = defaultOrangeRate;
-                }
-            }
             Prize.PrizeType prizeType = Prize.PrizeType.of((String) ((Map<String, Object>) secondMap).get("prizeType"));
             String prizeValue = (String) ((Map<String, Object>) secondMap).get("prizeValue");
             int prizeCount = (int) ((Map<String, Object>) secondMap).get("prizeCount");
@@ -99,11 +78,6 @@ public class PrizePool {
             Prize prize = new Prize();
             prize.setName(key);
             prize.setInfo(info);
-            prize.setShowRate(showRate);
-            prize.setRedRate(redRate);
-            prize.setBlueRate(blueRate);
-            prize.setYellowRate(yellowRate);
-            prize.setOrangeRate(orangeRate);
             prize.setPrizeType(prizeType);
             prize.setPrizeValue(prizeValue);
             prize.setPrizeCount(prizeCount);
@@ -153,6 +127,7 @@ public class PrizePool {
         config.save();
     }
 
+    @Deprecated
     public static void saveMachine(RoundaboutEntity roundaboutEntity) {
         roundaboutEntity.save();
     }
@@ -173,21 +148,19 @@ public class PrizePool {
         config.save();
     }
 
+    /**
+     * Nk 储存会打乱arrange顺序
+     */
+    @Deprecated
     public static void savePrize(Prize prize) {
         if(!allPrize.containsValue(prize)) {
             allPrize.put(prize.getName(), prize);
         }
         Map<String ,Object> prizeMap = new HashMap<>();
         prizeMap.put("info", prize.getInfo());
-        prizeMap.put("showRate", prize.isShowRate());
-        prizeMap.put("redRate", prize.getRedRate());
-        prizeMap.put("blueRate", prize.getBlueRate());
-        prizeMap.put("yellowRate", prize.getYellowRate());
-        prizeMap.put("orangeRate", prize.getOrangeRate());
         prizeMap.put("prizeType", prize.getPrizeType().name().toLowerCase(Locale.ROOT));
         prizeMap.put("prizeValue", prize.getPrizeValue());
         prizeMap.put("prizeCount", prize.getPrizeCount());
-        // nk往Config写入的二维数组很奇怪，于是便不保存这个数据了
         //prizeMap.put("prizeSize", prize.getPrizeSize());
         //prizeMap.put("prizeArrangements", prize.getPrizeArrangements());
         prizeMap.put("prizeArranged", prize.isPrizeArranged());

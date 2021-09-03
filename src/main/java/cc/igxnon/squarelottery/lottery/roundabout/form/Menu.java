@@ -61,9 +61,7 @@ public class Menu {
         String raw = Languages.translate("%lottery_roundabout_form_prize_content%");
         String[] hideStrings = StringUtils.readContent(raw, "[", "]");
         for (String hide : hideStrings) {
-            if (prize.isShowRate() && hide.contains("{redRate}")) {
-                raw = raw.replace(hide, hide.substring(1, hide.length()-1));
-            }else if(prize.getPrizeCount() != -1 && hide.contains("{prizeCount}")) {
+            if(prize.getPrizeCount() != -1 && hide.contains("{prizeCount}")) {
                 raw = raw.replace(hide, hide.substring(1, hide.length()-1));
             }else {
                 raw = raw.replace(hide, "");
@@ -71,10 +69,6 @@ public class Menu {
         }
         String content = raw.replace("{n}", "\n")
                 .replace("{info}", prize.getInfo())
-                .replace("{redRate}", String.valueOf(prize.getRedRate()))
-                .replace("{blueRate}", String.valueOf(prize.getBlueRate()))
-                .replace("{yellowRate}", String.valueOf(prize.getYellowRate()))
-                .replace("{orangeRate}", String.valueOf(prize.getOrangeRate()))
                 .replace("{prizeCount}", String.valueOf(prize.getPrizeCount()))
                 .replace("{prizeArranged}", prize.isPrizeArranged() ? Languages.translate("%lottery_roundabout_form_prize_prizearranged_true%") : Languages.translate("%lottery_roundabout_form_prize_prizearranged_false%"))
                 .replace("{prizeArrangements}", prize.getPrizeArrangementsList());
